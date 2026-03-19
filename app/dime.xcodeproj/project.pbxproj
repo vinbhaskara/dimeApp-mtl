@@ -69,7 +69,6 @@
 		5358E9192AC885E3003E8CA9 /* AlertToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5358E9182AC885E3003E8CA9 /* AlertToast.swift */; };
 		53620B8B28CAE3520058F216 /* LockBudgetWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53620B8A28CAE3520058F216 /* LockBudgetWidget.swift */; };
 		5362CF322A92750800244744 /* ImportDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5362CF312A92750800244744 /* ImportDataView.swift */; };
-		536715ED28E1E9A3008461F2 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 536715EC28E1E9A3008461F2 /* StoreKit.framework */; };
 		536A2A152A59C47400D81E02 /* Wiggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536A2A142A59C47400D81E02 /* Wiggle.swift */; };
 		536A2A172A5A7C5D00D81E02 /* OffsetHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536A2A162A5A7C5D00D81E02 /* OffsetHelper.swift */; };
 		536CC386293106180081E401 /* LineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536CC385293106180081E401 /* LineGraph.swift */; };
@@ -143,7 +142,6 @@
 		53D6BDDD2AF73E4300F5728E /* SettingsBackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53D6BDDC2AF73E4300F5728E /* SettingsBackButton.swift */; };
 		53D6BDDF2AF73EF100F5728E /* SettingsHapticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53D6BDDE2AF73EF100F5728E /* SettingsHapticsView.swift */; };
 		53D6BDE12AF73FAB00F5728E /* SettingsSubviewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53D6BDE02AF73FAB00F5728E /* SettingsSubviewModifier.swift */; };
-		53DCFAA12A498FBF0063FCDE /* CloudKitSyncMonitor in Frameworks */ = {isa = PBXBuildFile; productRef = 53DCFAA02A498FBF0063FCDE /* CloudKitSyncMonitor */; };
 		53E832E52B0A2CAF000CBBA0 /* InsightsSummaryBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E832E42B0A2CAF000CBBA0 /* InsightsSummaryBlock.swift */; };
 		53E832E72B0B067B000CBBA0 /* TransactionCategoryPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E832E62B0B067B000CBBA0 /* TransactionCategoryPicker.swift */; };
 		53EB930E28A65A570026BE28 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5327D2B5287C6AFB00F76ADF /* Color.swift */; };
@@ -265,7 +263,6 @@
 		5358E9182AC885E3003E8CA9 /* AlertToast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertToast.swift; sourceTree = "<group>"; };
 		53620B8A28CAE3520058F216 /* LockBudgetWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockBudgetWidget.swift; sourceTree = "<group>"; };
 		5362CF312A92750800244744 /* ImportDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportDataView.swift; sourceTree = "<group>"; };
-		536715EC28E1E9A3008461F2 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		536A2A142A59C47400D81E02 /* Wiggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wiggle.swift; sourceTree = "<group>"; };
 		536A2A162A5A7C5D00D81E02 /* OffsetHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffsetHelper.swift; sourceTree = "<group>"; };
 		536CC385293106180081E401 /* LineGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineGraph.swift; sourceTree = "<group>"; };
@@ -360,11 +357,9 @@
 				D6A4DE202D61744400F7F751 /* SwiftUIIntrospect in Frameworks */,
 				53A4148028B7DA4C008C30E7 /* ConfettiSwiftUI in Frameworks */,
 				5383D85E287D9A0100D1B9BA /* CloudKit.framework in Frameworks */,
-				53DCFAA12A498FBF0063FCDE /* CloudKitSyncMonitor in Frameworks */,
 				5327D2E6287C6CC300F76ADF /* Popovers in Frameworks */,
 				538D10752A5AB7E7008F1AFB /* IsScrolling in Frameworks */,
 				533A38F42AA49E5900F66957 /* Alamofire in Frameworks */,
-				536715ED28E1E9A3008461F2 /* StoreKit.framework in Frameworks */,
 				53B1D1A8289A60D500E28062 /* CrookedText in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -557,7 +552,6 @@
 		5383D85C287D9A0100D1B9BA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				536715EC28E1E9A3008461F2 /* StoreKit.framework */,
 				5383D85D287D9A0100D1B9BA /* CloudKit.framework */,
 				53B1D18B288ED7E400E28062 /* WidgetKit.framework */,
 				53B1D18D288ED7E500E28062 /* SwiftUI.framework */,
@@ -728,7 +722,6 @@
 				5327D2E5287C6CC300F76ADF /* Popovers */,
 				53B1D1A7289A60D500E28062 /* CrookedText */,
 				53A4147F28B7DA4C008C30E7 /* ConfettiSwiftUI */,
-				53DCFAA02A498FBF0063FCDE /* CloudKitSyncMonitor */,
 				538D10742A5AB7E7008F1AFB /* IsScrolling */,
 				533A38F32AA49E5900F66957 /* Alamofire */,
 				D6A4DE1F2D61744400F7F751 /* SwiftUIIntrospect */,
@@ -792,7 +785,6 @@
 				5327D2E4287C6CC300F76ADF /* XCRemoteSwiftPackageReference "Popovers" */,
 				53B1D1A6289A60D500E28062 /* XCRemoteSwiftPackageReference "CrookedText" */,
 				53A4147E28B7DA4C008C30E7 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */,
-				53DCFA9F2A498FBF0063FCDE /* XCRemoteSwiftPackageReference "CloudKitSyncMonitor" */,
 				538D10732A5AB7E7008F1AFB /* XCRemoteSwiftPackageReference "IsScrolling" */,
 				533A38F22AA49E0100F66957 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				D6A4DE1E2D61744400F7F751 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
@@ -1087,7 +1079,7 @@
 				CODE_SIGN_ENTITLEMENTS = BudgetIntent/BudgetIntent.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5UNNTHMF44;
+				DEVELOPMENT_TEAM = CRD9RBS86H;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BudgetIntent/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BudgetIntent;
@@ -1099,7 +1091,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 2.1.4;
-				PRODUCT_BUNDLE_IDENTIFIER = com.rafaelsoh.dime.BudgetIntent;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vinbhaskara.dime.BudgetIntent;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1119,7 +1111,7 @@
 				CODE_SIGN_ENTITLEMENTS = BudgetIntent/BudgetIntent.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5UNNTHMF44;
+				DEVELOPMENT_TEAM = CRD9RBS86H;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BudgetIntent/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BudgetIntent;
@@ -1131,7 +1123,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 2.1.4;
-				PRODUCT_BUNDLE_IDENTIFIER = com.rafaelsoh.dime.BudgetIntent;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vinbhaskara.dime.BudgetIntent;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1148,9 +1140,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BudgetIntentUI/BudgetIntentUI.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5UNNTHMF44;
+				DEVELOPMENT_TEAM = CRD9RBS86H;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BudgetIntentUI/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BudgetIntentUI;
@@ -1162,8 +1155,9 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 2.1.4;
-				PRODUCT_BUNDLE_IDENTIFIER = com.rafaelsoh.dime.BudgetIntentUI;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vinbhaskara.dime.BudgetIntentUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -1175,9 +1169,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BudgetIntentUI/BudgetIntentUI.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5UNNTHMF44;
+				DEVELOPMENT_TEAM = CRD9RBS86H;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BudgetIntentUI/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BudgetIntentUI;
@@ -1189,8 +1184,9 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 2.1.4;
-				PRODUCT_BUNDLE_IDENTIFIER = com.rafaelsoh.dime.BudgetIntentUI;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vinbhaskara.dime.BudgetIntentUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -1326,7 +1322,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"dime/Preview Content\"";
-				DEVELOPMENT_TEAM = 5UNNTHMF44;
+				DEVELOPMENT_TEAM = CRD9RBS86H;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = dime/Info.plist;
@@ -1343,7 +1339,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 2.1.4;
-				PRODUCT_BUNDLE_IDENTIFIER = com.rafaelsoh.dime;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vinbhaskara.dime;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -1367,7 +1363,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"dime/Preview Content\"";
-				DEVELOPMENT_TEAM = 5UNNTHMF44;
+				DEVELOPMENT_TEAM = CRD9RBS86H;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = dime/Info.plist;
@@ -1384,7 +1380,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 2.1.4;
-				PRODUCT_BUNDLE_IDENTIFIER = com.rafaelsoh.dime;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vinbhaskara.dime;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -1406,7 +1402,7 @@
 				CODE_SIGN_ENTITLEMENTS = ExpenditureWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5UNNTHMF44;
+				DEVELOPMENT_TEAM = CRD9RBS86H;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ExpenditureWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ExpenditureWidgetExtension;
@@ -1418,7 +1414,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 2.1.4;
-				PRODUCT_BUNDLE_IDENTIFIER = com.rafaelsoh.dime.ExpenditureWidget;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vinbhaskara.dime.ExpenditureWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1437,7 +1433,7 @@
 				CODE_SIGN_ENTITLEMENTS = ExpenditureWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5UNNTHMF44;
+				DEVELOPMENT_TEAM = CRD9RBS86H;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ExpenditureWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ExpenditureWidgetExtension;
@@ -1449,7 +1445,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 2.1.4;
-				PRODUCT_BUNDLE_IDENTIFIER = com.rafaelsoh.dime.ExpenditureWidget;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vinbhaskara.dime.ExpenditureWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1549,14 +1545,6 @@
 				minimumVersion = 0.0.1;
 			};
 		};
-		53DCFA9F2A498FBF0063FCDE /* XCRemoteSwiftPackageReference "CloudKitSyncMonitor" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/ggruen/CloudKitSyncMonitor.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.2.1;
-			};
-		};
 		D6A4DE1E2D61744400F7F751 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/siteline/SwiftUI-Introspect";
@@ -1592,11 +1580,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 53B1D1A6289A60D500E28062 /* XCRemoteSwiftPackageReference "CrookedText" */;
 			productName = CrookedText;
-		};
-		53DCFAA02A498FBF0063FCDE /* CloudKitSyncMonitor */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 53DCFA9F2A498FBF0063FCDE /* XCRemoteSwiftPackageReference "CloudKitSyncMonitor" */;
-			productName = CloudKitSyncMonitor;
 		};
 		D6A4DE1F2D61744400F7F751 /* SwiftUIIntrospect */ = {
 			isa = XCSwiftPackageProductDependency;

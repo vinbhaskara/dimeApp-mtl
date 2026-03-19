@@ -36,4 +36,8 @@ class SceneDelegate: NSObject, UIWindowSceneDelegate {
 
         openURL(url, completion: completionHandler)
     }
+
+    func sceneDidEnterBackground(_: UIScene) {
+        DataController.shared.save()
+    }
 }

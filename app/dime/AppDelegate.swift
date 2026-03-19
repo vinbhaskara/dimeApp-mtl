@@ -17,4 +17,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         sceneConfiguration.delegateClass = SceneDelegate.self
         return sceneConfiguration
     }
+
+    func applicationWillTerminate(_: UIApplication) {
+        DataController.shared.save()
+    }
 }

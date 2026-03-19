@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct SettingsCurrencyView: View {
-  @AppStorage("currency", store: UserDefaults(suiteName: "group.com.rafaelsoh.dime"))
+  @AppStorage("currency", store: UserDefaults(suiteName: "group.com.vinbhaskara.dime"))
   var currencyCode: String = Locale.current.currencyCode!
   @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
   @Environment(\.dynamicTypeSize) var dynamicTypeSize
@@ -64,8 +64,6 @@ struct SettingsCurrencyView: View {
                 withAnimation(.easeIn(duration: 0.15)) {
                   currencyCode = currency.code
                 }
-
-                NSUbiquitousKeyValueStore.default.set(currency.code, forKey: "currency")
 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                   self.presentationMode.wrappedValue.dismiss()
