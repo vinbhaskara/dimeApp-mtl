@@ -57,7 +57,8 @@ struct Provider: IntentTimelineProvider {
     func getTimeline(for configuration: RecentWidgetConfigurationIntent, in _: Context, completion: @escaping (Timeline<Entry>) -> Void) {
         let entry = RecentWidgetEntry(date: Date(), amount: loadAmount(type: configuration.duration, insightsType: configuration.insightsType), transactions: loadTransactions(type: configuration.duration, count: 9), duration: configuration.duration, type: configuration.insightsType)
 
-        let timeline = Timeline(entries: [entry], policy: .atEnd)
+        let nextRefresh = Calendar.current.date(byAdding: .minute, value: 15, to: Date())!
+        let timeline = Timeline(entries: [entry], policy: .after(nextRefresh))
 
         completion(timeline)
     }
@@ -199,7 +200,7 @@ struct ExpenditureWidgetEntryView: View {
             if entry.amount == 0 {
                 Text("\(currencySymbol)0 \(typeText) \(inlineSubtitleText)")
             } else {
-                Text("\(positivityText)\(currencySymbol)\(abs(entry.amount), specifier: (showCents && entry.amount < 1000) ? "%.2f" : "%.0f") \(inlineSubtitleText)")
+                Text(verbatim: positivityText + currencySymbol + String(format: (showCents && entry.amount < 1000) ? "%.2f" : "%.0f", abs(entry.amount)) + " " + inlineSubtitleText)
             }
         case .accessoryRectangular:
             if #available(iOS 17.0, *) {
@@ -218,7 +219,7 @@ struct ExpenditureWidgetEntryView: View {
                                         .lineLimit(1)
                                         .frame(maxWidth: .infinity, alignment: .leading)
 
-                                    Text("\(transaction.income ? "+" : "-")\(currencySymbol)\(transaction.amount, specifier: (showCents && transaction.amount < 100) ? "%.2f" : "%.0f")")
+                                    Text(verbatim: (transaction.income ? "+" : "-") + currencySymbol + String(format: (showCents && transaction.amount < 100) ? "%.2f" : "%.0f", transaction.amount))
                                         .fontWeight(.regular)
                                         .layoutPriority(1)
                                         .lineLimit(1)
@@ -246,7 +247,7 @@ struct ExpenditureWidgetEntryView: View {
                                         .lineLimit(1)
                                         .frame(maxWidth: .infinity, alignment: .leading)
 
-                                    Text("\(transaction.income ? "+" : "-")\(currencySymbol)\(transaction.amount, specifier: (showCents && transaction.amount < 100) ? "%.2f" : "%.0f")")
+                                    Text(verbatim: (transaction.income ? "+" : "-") + currencySymbol + String(format: (showCents && transaction.amount < 100) ? "%.2f" : "%.0f", transaction.amount))
                                         .fontWeight(.regular)
                                         .layoutPriority(1)
                                         .lineLimit(1)
@@ -315,13 +316,13 @@ struct ExpenditureWidgetEntryView: View {
                                             .frame(maxWidth: .infinity, alignment: .leading)
 
                                         if transaction.income {
-                                            Text("+\(currencySymbol)\(transaction.amount, specifier: (showCents && transaction.amount < 100) ? "%.2f" : "%.0f")")
+                                            Text(verbatim: "+" + currencySymbol + String(format: (showCents && transaction.amount < 100) ? "%.2f" : "%.0f", transaction.amount))
                                                 .font(.system(size: 13, weight: .regular, design: .rounded))
                                                 .foregroundColor(Color.IncomeGreen)
                                                 .lineLimit(1)
                                                 .layoutPriority(1)
                                         } else {
-                                            Text("-\(currencySymbol)\(transaction.amount, specifier: (showCents && transaction.amount < 100) ? "%.2f" : "%.0f")")
+                                            Text(verbatim: "-" + currencySymbol + String(format: (showCents && transaction.amount < 100) ? "%.2f" : "%.0f", transaction.amount))
                                                 .font(.system(size: 13, weight: .regular, design: .rounded))
                                                 .foregroundColor(Color.SubtitleText)
                                                 .lineLimit(1)
@@ -411,13 +412,13 @@ struct ExpenditureWidgetEntryView: View {
                                             .frame(maxWidth: .infinity, alignment: .leading)
 
                                         if transaction.income {
-                                            Text("+\(currencySymbol)\(transaction.amount, specifier: (showCents && transaction.amount < 100) ? "%.2f" : "%.0f")")
+                                            Text(verbatim: "+" + currencySymbol + String(format: (showCents && transaction.amount < 100) ? "%.2f" : "%.0f", transaction.amount))
                                                 .font(.system(size: 13, weight: .regular, design: .rounded))
                                                 .foregroundColor(Color.IncomeGreen)
                                                 .lineLimit(1)
                                                 .layoutPriority(1)
                                         } else {
-                                            Text("-\(currencySymbol)\(transaction.amount, specifier: (showCents && transaction.amount < 100) ? "%.2f" : "%.0f")")
+                                            Text(verbatim: "-" + currencySymbol + String(format: (showCents && transaction.amount < 100) ? "%.2f" : "%.0f", transaction.amount))
                                                 .font(.system(size: 13, weight: .regular, design: .rounded))
                                                 .foregroundColor(Color.SubtitleText)
                                                 .lineLimit(1)
@@ -512,13 +513,13 @@ struct ExpenditureWidgetEntryView: View {
                                             .frame(maxWidth: .infinity, alignment: .leading)
 
                                         if transaction.income {
-                                            Text("+\(currencySymbol)\(transaction.amount, specifier: (showCents && transaction.amount < 100) ? "%.2f" : "%.0f")")
+                                            Text(verbatim: "+" + currencySymbol + String(format: (showCents && transaction.amount < 100) ? "%.2f" : "%.0f", transaction.amount))
                                                 .font(.system(size: 16, weight: .regular, design: .rounded))
                                                 .foregroundColor(Color.IncomeGreen)
                                                 .lineLimit(1)
                                                 .layoutPriority(1)
                                         } else {
-                                            Text("-\(currencySymbol)\(transaction.amount, specifier: (showCents && transaction.amount < 100) ? "%.2f" : "%.0f")")
+                                            Text(verbatim: "-" + currencySymbol + String(format: (showCents && transaction.amount < 100) ? "%.2f" : "%.0f", transaction.amount))
                                                 .font(.system(size: 16, weight: .regular, design: .rounded))
                                                 .foregroundColor(Color.SubtitleText)
                                                 .lineLimit(1)
@@ -616,7 +617,7 @@ struct RecentTransactionsDollarView: View {
                     .font(.system(bigger ? .title3 : .subheadline, design: .rounded).weight(.medium))
                     .foregroundColor(Color.SubtitleText) +
 
-                Text("\(actualAmount, specifier: showCents && actualAmount < 100  ? "%.2f" : "%.0f")")
+                Text(verbatim: String(format: showCents && actualAmount < 100 ? "%.2f" : "%.0f", actualAmount))
                     .font(.system(bigger ? .title : .title3, design: .rounded).weight(.medium))
                     .foregroundColor(Color.PrimaryText)
             }

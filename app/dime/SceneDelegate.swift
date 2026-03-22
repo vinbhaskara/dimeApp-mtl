@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import WidgetKit
 
 class SceneDelegate: NSObject, UIWindowSceneDelegate {
     @Environment(\.openURL) var openURL
@@ -35,6 +36,10 @@ class SceneDelegate: NSObject, UIWindowSceneDelegate {
         }
 
         openURL(url, completion: completionHandler)
+    }
+
+    func sceneWillEnterForeground(_: UIScene) {
+        WidgetCenter.shared.reloadAllTimelines()
     }
 
     func sceneDidEnterBackground(_: UIScene) {

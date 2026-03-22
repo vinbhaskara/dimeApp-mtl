@@ -56,7 +56,8 @@ struct LockBudgetWidgetProvider: IntentTimelineProvider {
 
         let entry = LockBudgetWidgetEntry(date: Date(), totalSpent: loaded.total, timeLeft: loaded.timeLeft, budget: loaded.budget, configuration: configuration)
 
-        let timeline = Timeline(entries: [entry], policy: .atEnd)
+        let nextRefresh = Calendar.current.date(byAdding: .minute, value: 15, to: Date())!
+        let timeline = Timeline(entries: [entry], policy: .after(nextRefresh))
 
         completion(timeline)
     }
@@ -173,7 +174,7 @@ struct LockBudgetWidgetEntryView: View {
             if entry.configuration.budget == nil {
                 Text("Select budget in widget options")
             } else {
-                Text("\(entry.budget.emoji) \(currencySymbol)\(difference, specifier: (showCents && difference < 100) ? "%.2f" : "%.0f") \(subtitle)")
+                Text(verbatim: entry.budget.emoji + " " + currencySymbol + String(format: (showCents && difference < 100) ? "%.2f" : "%.0f", difference) + " " + subtitle)
                     .widgetURL(URL(string: "dimeapp://budget?budget=\(entry.budget.name)"))
             }
 
@@ -249,7 +250,7 @@ struct LockBudgetWidgetEntryView: View {
                             }
                             .font(.system(size: 15, weight: .semibold, design: .rounded))
 
-                            Text("\(currencySymbol)\(difference, specifier: (showCents && difference < 100) ? "%.2f" : "%.0f") \(subtitle) \(budgetType)")
+                            Text(verbatim: currencySymbol + String(format: (showCents && difference < 100) ? "%.2f" : "%.0f", difference) + " " + subtitle + " " + budgetType)
                                 .font(.system(size: 14, weight: .regular, design: .rounded))
                                 .foregroundColor(Color.SubtitleText)
 
@@ -258,10 +259,10 @@ struct LockBudgetWidgetEntryView: View {
                             } currentValueLabel: {
                                 EmptyView()
                             } minimumValueLabel: {
-                                Text("\(entry.totalSpent, specifier: (showCents && entry.totalSpent < 100) ? "%.2f" : "%.0f")")
+                                Text(verbatim: String(format: (showCents && entry.totalSpent < 100) ? "%.2f" : "%.0f", entry.totalSpent))
                                     .font(.system(size: 10, weight: .regular, design: .rounded))
                             } maximumValueLabel: {
-                                Text("\(entry.budget.budgetAmount, specifier: (showCents && entry.budget.budgetAmount < 100) ? "%.2f" : "%.0f")")
+                                Text(verbatim: String(format: (showCents && entry.budget.budgetAmount < 100) ? "%.2f" : "%.0f", entry.budget.budgetAmount))
                                     .font(.system(size: 10, weight: .regular, design: .rounded))
                             }
                             .frame(height: 5)
@@ -292,7 +293,7 @@ struct LockBudgetWidgetEntryView: View {
                             }
                             .font(.system(size: 15, weight: .semibold, design: .rounded))
 
-                            Text("\(currencySymbol)\(difference, specifier: (showCents && difference < 100) ? "%.2f" : "%.0f") \(subtitle) \(budgetType)")
+                            Text(verbatim: currencySymbol + String(format: (showCents && difference < 100) ? "%.2f" : "%.0f", difference) + " " + subtitle + " " + budgetType)
                                 .font(.system(size: 14, weight: .regular, design: .rounded))
                                 .foregroundColor(Color.SubtitleText)
 
@@ -302,10 +303,10 @@ struct LockBudgetWidgetEntryView: View {
                                 } currentValueLabel: {
                                     EmptyView()
                                 } minimumValueLabel: {
-                                    Text("\(entry.totalSpent, specifier: (showCents && entry.totalSpent < 100) ? "%.2f" : "%.0f")")
+                                    Text(verbatim: String(format: (showCents && entry.totalSpent < 100) ? "%.2f" : "%.0f", entry.totalSpent))
                                         .font(.system(size: 10, weight: .regular, design: .rounded))
                                 } maximumValueLabel: {
-                                    Text("\(entry.budget.budgetAmount, specifier: (showCents && entry.budget.budgetAmount < 100) ? "%.2f" : "%.0f")")
+                                    Text(verbatim: String(format: (showCents && entry.budget.budgetAmount < 100) ? "%.2f" : "%.0f", entry.budget.budgetAmount))
                                         .font(.system(size: 10, weight: .regular, design: .rounded))
                                 }
                                 .frame(height: 5)

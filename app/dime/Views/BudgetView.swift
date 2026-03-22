@@ -376,6 +376,21 @@ struct MainBudgetView: View {
         }
     }
 
+    var periodLabel: String {
+        if budget.isFault { return "" }
+        switch budget.type {
+        case 1: return "DAY"
+        case 2: return "WEEK"
+        case 3: return "MONTH"
+        case 4: return "YEAR"
+        default: return "PERIOD"
+        }
+    }
+
+    var periodPercentString: String {
+        return "\(Int(round(percentageOfDays * 100)))%"
+    }
+
     var width: CGFloat {
         if soloBudget {
             return UIScreen.main.bounds.width - 90
@@ -410,7 +425,7 @@ struct MainBudgetView: View {
                     }
                 }
 
-                CrookedText(text: String(localized: "OVERALL SPENT: \(percentString1)"), radius: width / 2 + 8)
+                CrookedText(text: String(localized: "SPENT: \(percentString1)"), radius: width / 2 + 8)
                     .font(.system(.footnote, design: .rounded).weight(.medium))
 //                    .font(.system(size: 13, weight: .medium, design: .rounded))
                     .foregroundColor(Color.SubtitleText)
@@ -428,12 +443,16 @@ struct MainBudgetView: View {
                 }
             }
 
+            Text("\(periodLabel): \(periodPercentString)")
+                .font(.system(.caption2, design: .rounded).weight(.medium))
+                .foregroundColor(Color.SubtitleText)
+
             HStack {
                 if totalSpent < 1000 && budgetAmount < 1000 {
-                    Text("\(totalSpent, specifier: "%.2f")")
+                    Text(verbatim: String(format: "%.2f", totalSpent))
                         .frame(width: 60, alignment: .leading)
                     Spacer()
-                    Text("\(budgetAmount, specifier: "%.2f")")
+                    Text(verbatim: String(format: "%.2f", budgetAmount))
                         .frame(width: 60, alignment: .trailing)
                 } else {
                     Text("\(Int(round(totalSpent)))")
@@ -624,6 +643,35 @@ struct SingleBudgetView: View {
         }
     }
 
+    var percentageOfDays: Double {
+        let calendar = Calendar.current
+        if budget.isFault { return 0.0 }
+        if budget.type == 1 {
+            let components = calendar.dateComponents([.minute], from: budget.wrappedDate, to: Date.now)
+            return Double(components.minute ?? 0) / 1440
+        }
+        let components1 = calendar.dateComponents([.day], from: budget.wrappedDate, to: budget.endDate)
+        let numberOfDays = components1.day ?? 0
+        let components2 = calendar.dateComponents([.day], from: budget.wrappedDate, to: Date.now)
+        let numberOfDaysPast = components2.day ?? 0
+        return Double(numberOfDaysPast) / Double(numberOfDays)
+    }
+
+    var periodLabel: String {
+        if budget.isFault { return "" }
+        switch budget.type {
+        case 1: return "DAY"
+        case 2: return "WEEK"
+        case 3: return "MONTH"
+        case 4: return "YEAR"
+        default: return "PERIOD"
+        }
+    }
+
+    var periodPercentString: String {
+        return "\(Int(round(percentageOfDays * 100)))%"
+    }
+
     var targetPercent: Double {
         let calendar = Calendar.current
 
@@ -700,6 +748,11 @@ struct SingleBudgetView: View {
                                 Text("\(timeLeft) • \(percentString1) spent")
                                     .font(.system(.footnote, design: .rounded).weight(.medium))
 //                                    .font(.system(size: 13, weight: .medium, design: .rounded))
+                                    .lineLimit(1)
+                                    .foregroundColor(Color.SubtitleText)
+
+                                Text("\(periodLabel): \(periodPercentString)")
+                                    .font(.system(.footnote, design: .rounded).weight(.medium))
                                     .lineLimit(1)
                                     .foregroundColor(Color.SubtitleText)
                             }
@@ -820,12 +873,17 @@ struct SingleBudgetView: View {
                     HStack {
                         VStack(alignment: .leading, spacing: -2) {
                             if totalSpent < budgetAmount {
-                                Text("\(percentString1) SPENT")
-                                    .font(.system(.caption2, design: .rounded).weight(.semibold))
-//                                    .font(.system(size: 11, weight: .semibold, design: .rounded))
-                                    .lineLimit(1)
-                                    .foregroundColor(totalSpent / budgetAmount > 1 ? Color("BudgetRed") : Color.IncomeGreen)
-                                    .padding(.bottom, 5)
+                                HStack(spacing: 4) {
+                                    Text("\(percentString1) SPENT")
+                                        .foregroundColor(totalSpent / budgetAmount > 1 ? Color("BudgetRed") : Color.IncomeGreen)
+                                    Text("·")
+                                        .foregroundColor(Color.SubtitleText)
+                                    Text("\(periodLabel): \(periodPercentString)")
+                                        .foregroundColor(Color.SubtitleText)
+                                }
+                                .font(.system(.caption2, design: .rounded).weight(.semibold))
+                                .lineLimit(1)
+                                .padding(.bottom, 5)
                             }
 
                             BudgetDollarView(amount: difference, red: totalSpent >= budgetAmount, scale: 2, size: width - 40)
@@ -967,8 +1025,6 @@ struct AnimatedBudgetBarGraph: View {
 }
 
 struct BudgetDollarView: View {
-    @AppStorage("showCents", store: UserDefaults(suiteName: "group.com.vinbhaskara.dime")) var showCents: Bool = true
-
     var amount: Double
     var red: Bool
     var scale: Int
@@ -996,7 +1052,7 @@ struct BudgetDollarView: View {
                     .font(.system(dynamicTypeSizes.symbol, design: .rounded).weight(.medium))
                     .foregroundColor(red ? Color("BudgetRed") : Color.SubtitleText) +
 
-                Text("\(amount, specifier: showCents && amount < 100 ? "%.2f" : "%.0f")")
+                Text(verbatim: String(format: "%.2f", amount))
                     .font(.system(dynamicTypeSizes.amount, design: .rounded).weight(.medium))
                     .foregroundColor(red ? Color("BudgetRed") : Color.PrimaryText)
             }
@@ -1008,7 +1064,6 @@ struct BudgetDollarView: View {
 
 struct DetailedBudgetDollarView: View {
     var amount: Double
-    @AppStorage("showCents", store: UserDefaults(suiteName: "group.com.vinbhaskara.dime")) var showCents: Bool = true
 
     @AppStorage("currency", store: UserDefaults(suiteName: "group.com.vinbhaskara.dime")) var currency: String = Locale.current.currencyCode!
     var currencySymbol: String {
@@ -1022,7 +1077,7 @@ struct DetailedBudgetDollarView: View {
                     .font(.system(.title2, design: .rounded).weight(.medium))
                     .foregroundColor(Color.SubtitleText) +
 
-                Text("\(amount, specifier: showCents && amount < 100 ? "%.2f" : "%.0f")")
+                Text(verbatim: String(format: "%.2f", amount))
                     .font(.system(.largeTitle, design: .rounded).weight(.medium))
                     .foregroundColor(Color.PrimaryText)
             }
@@ -1036,8 +1091,6 @@ struct DetailedBudgetDifferenceDollarView: View {
     var amount: Double
     var red: Bool
 
-    @AppStorage("showCents", store: UserDefaults(suiteName: "group.com.vinbhaskara.dime")) var showCents: Bool = true
-
     @AppStorage("currency", store: UserDefaults(suiteName: "group.com.vinbhaskara.dime")) var currency: String = Locale.current.currencyCode!
     var currencySymbol: String {
         return Locale.current.localizedCurrencySymbol(forCurrencyCode: currency)!
@@ -1050,7 +1103,7 @@ struct DetailedBudgetDifferenceDollarView: View {
                     .font(.system(.title2, design: .rounded).weight(.medium))
                     .foregroundColor(red ? Color("BudgetRed") : Color.SubtitleText) +
 
-                Text("\(amount, specifier: showCents && amount < 100 ? "%.2f" : "%.0f")")
+                Text(verbatim: String(format: "%.2f", amount))
                     .font(.system(.largeTitle, design: .rounded).weight(.medium))
                     .foregroundColor(red ? Color("BudgetRed") : Color.PrimaryText)
             }
@@ -1634,9 +1687,9 @@ struct TimeBudgetView: View {
                 .frame(height: 28)
 
                 HStack {
-                    Text("\(currencySymbol)\(totalSpent, specifier: "%.2f")")
+                    Text(verbatim: currencySymbol + String(format: "%.2f", totalSpent))
                     Spacer()
-                    Text("\(currencySymbol)\(budgetAmount, specifier: "%.2f")")
+                    Text(verbatim: currencySymbol + String(format: "%.2f", budgetAmount))
                 }
                 .frame(maxWidth: .infinity)
                 .font(.system(.caption, design: .rounded))
@@ -2120,9 +2173,9 @@ struct TimeMainBudgetView: View {
                 .frame(height: 28)
 
                 HStack {
-                    Text("\(currencySymbol)\(totalSpent, specifier: "%.2f")")
+                    Text(verbatim: currencySymbol + String(format: "%.2f", totalSpent))
                     Spacer()
-                    Text("\(currencySymbol)\(budgetAmount, specifier: "%.2f")")
+                    Text(verbatim: currencySymbol + String(format: "%.2f", budgetAmount))
                 }
                 .frame(maxWidth: .infinity)
                 .font(.system(.caption, design: .rounded))

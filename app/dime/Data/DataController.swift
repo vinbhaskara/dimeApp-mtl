@@ -263,6 +263,7 @@ class DataController: ObservableObject {
     func fetchRequestForRecurringTransactions() -> NSFetchRequest<Transaction> {
         let itemRequest: NSFetchRequest<Transaction> = Transaction.fetchRequest()
         itemRequest.predicate = NSPredicate(format: "%K > %i", #keyPath(Transaction.recurringType), 0)
+        itemRequest.fetchBatchSize = 20
         return itemRequest
     }
 
@@ -410,6 +411,7 @@ class DataController: ObservableObject {
     func getSuggestedNotes(searchQuery: String, category: Category?, income: Bool) -> [Transaction] {
         let itemRequest: NSFetchRequest<Transaction> = Transaction.fetchRequest()
         itemRequest.sortDescriptors = [NSSortDescriptor(keyPath: \Transaction.date, ascending: false)]
+        itemRequest.fetchLimit = 50
 
         let beginPredicate = NSPredicate(format: "%K BEGINSWITH[cd] %@", #keyPath(Transaction.note), searchQuery)
         let containPredicate = NSPredicate(format: "%K CONTAINS[cd] %@", #keyPath(Transaction.note), searchQuery)
@@ -619,6 +621,7 @@ class DataController: ObservableObject {
 
     func fetchRequestForLogView(type: Int, optionalIncome: Bool?, categoryFilters: [Category] = []) -> NSFetchRequest<Transaction> {
         let itemRequest: NSFetchRequest<Transaction> = Transaction.fetchRequest()
+        itemRequest.fetchBatchSize = 20
 
         var calendar = Calendar(identifier: .gregorian)
 
@@ -1145,6 +1148,7 @@ class DataController: ObservableObject {
     func fetchRequestForLineGraph(optionalIncome: Bool?) -> NSFetchRequest<Transaction> {
         let itemRequest: NSFetchRequest<Transaction> = Transaction.fetchRequest()
         itemRequest.sortDescriptors = [NSSortDescriptor(keyPath: \Transaction.date, ascending: true)]
+        itemRequest.fetchBatchSize = 50
 
         if let income = optionalIncome {
             itemRequest.predicate = NSPredicate(format: "income = %d", income)
@@ -1345,6 +1349,7 @@ class DataController: ObservableObject {
 
     func fetchRequestForInsights(type: Int, date: Date, income: Bool? = nil) -> NSFetchRequest<Transaction> {
         let itemRequest: NSFetchRequest<Transaction> = Transaction.fetchRequest()
+        itemRequest.fetchBatchSize = 20
 
         var calendar = Calendar(identifier: .gregorian)
 

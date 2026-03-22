@@ -14,7 +14,12 @@ import SwiftUI
 struct LogView: View {
     @State var updatedRecurring = false
 
-    @FetchRequest(sortDescriptors: []) private var transactions: FetchedResults<Transaction>
+    @FetchRequest(fetchRequest: {
+        let r = Transaction.fetchRequest()
+        r.sortDescriptors = [NSSortDescriptor(keyPath: \Transaction.date, ascending: false)]
+        r.fetchLimit = 1
+        return r
+    }()) private var transactions: FetchedResults<Transaction>
 
     @EnvironmentObject var dataController: DataController
     @Environment(\.managedObjectContext) var moc
@@ -381,7 +386,7 @@ struct NumberView: AnimatableModifier {
                     .font(.system(.largeTitle, design: .rounded))
                     .foregroundColor(Color.SubtitleText) +
 
-                Text("\(number, specifier: showCents  ? "%.2f" : "%.0f")")
+                Text(verbatim: String(format: showCents ? "%.2f" : "%.0f", number))
                     .font(.system(size: fontSize, weight: .regular, design: .rounded))
                     .foregroundColor(Color.PrimaryText)
             }

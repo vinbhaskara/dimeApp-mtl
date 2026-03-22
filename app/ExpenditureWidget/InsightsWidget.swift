@@ -45,7 +45,8 @@ struct InsightsProvider: IntentTimelineProvider {
 
         let entry = InsightsWidgetEntry(date: Date(), amount: loaded.amount, duration: configuration.duration, maximum: loaded.maximum, dates: loaded.dates, dictionary: loaded.dateDictionary, numberOfDays: loaded.numberOfDays, average: loaded.average, categories: loaded.categories, income: configuration.income == .income)
 
-        let timeline = Timeline(entries: [entry], policy: .atEnd)
+        let nextRefresh = Calendar.current.date(byAdding: .minute, value: 15, to: Date())!
+        let timeline = Timeline(entries: [entry], policy: .after(nextRefresh))
 
         completion(timeline)
     }

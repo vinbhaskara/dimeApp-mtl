@@ -11,7 +11,12 @@ import Popovers
 import SwiftUI
 
 struct InsightsView: View {
-    @FetchRequest(sortDescriptors: []) private var transactions: FetchedResults<Transaction>
+    @FetchRequest(fetchRequest: {
+        let r = Transaction.fetchRequest()
+        r.sortDescriptors = [NSSortDescriptor(keyPath: \Transaction.date, ascending: false)]
+        r.fetchLimit = 1
+        return r
+    }()) private var transactions: FetchedResults<Transaction>
 
     @State private var showTimeMenu = false
     @AppStorage("chartTimeFrame", store: UserDefaults(suiteName: "group.com.vinbhaskara.dime")) var chartType = 1
@@ -267,7 +272,7 @@ struct HorizontalPieChartView: View {
                                         .foregroundColor(Color.PrimaryText)
                                         .frame(maxWidth: .infinity, alignment: .leading)
 
-                                    Text("\(currencySymbol)\(category.amount, specifier: (showCents && category.amount < 100) ? "%.2f" : "%.0f")")
+                                    Text(verbatim: currencySymbol + String(format: (showCents && category.amount < 100) ? "%.2f" : "%.0f", category.amount))
                                         .font(.system(categoryFilterMode && categoryFilter == category.category ? .title3 : .body, design: .rounded).weight(.medium))
                                         .foregroundColor(Color.SubtitleText)
                                         .lineLimit(1)
@@ -2269,7 +2274,7 @@ struct InsightsDollarView: View {
                     .font(.system(.title3, design: .rounded).weight(.medium))
                     .foregroundColor(Color.SubtitleText) +
 
-                Text("\(amount, specifier: showCents && amount < 100 ? "%.2f" : "%.0f")")
+                Text(verbatim: String(format: showCents && amount < 100 ? "%.2f" : "%.0f", amount))
                     .font(.system(.title, design: .rounded).weight(.medium))
                     .foregroundColor(Color.PrimaryText)
             }

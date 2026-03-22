@@ -54,7 +54,8 @@ struct MainBudgetWidgetProvider: TimelineProvider {
 
         let entry = MainBudgetWidgetEntry(date: Date(), totalSpent: loaded.totalSpent, percentageOfDays: loaded.percentage, type: loaded.type, budgetAmount: loaded.budgetAmount, startDate: loaded.startDate, found: loaded.found)
 
-        let timeline = Timeline(entries: [entry], policy: .atEnd)
+        let nextRefresh = Calendar.current.date(byAdding: .minute, value: 15, to: Date())!
+        let timeline = Timeline(entries: [entry], policy: .after(nextRefresh))
 
         completion(timeline)
     }
@@ -147,6 +148,20 @@ struct MainBudgetWidgetEntryView: View {
         }
     }
 
+    var periodLabel: String {
+        switch entry.type {
+        case 1: return "DAY"
+        case 2: return "WEEK"
+        case 3: return "MONTH"
+        case 4: return "YEAR"
+        default: return "PERIOD"
+        }
+    }
+
+    var periodPercentString: String {
+        return "\(Int(round(entry.percentageOfDays * 100)))%"
+    }
+
     func showPercent(size: CGFloat) -> Bool {
         return size > headingText.widthOfRoundedString(size: 15, weight: .semibold) + 15 + percentString.widthOfRoundedString(size: 15, weight: .semibold)
     }
@@ -236,7 +251,7 @@ struct MainBudgetWidgetEntryView: View {
                             }
                             .font(.system(size: 15, weight: .semibold, design: .rounded))
 
-                            Text("\(currencySymbol)\(difference, specifier: (showCents && difference < 100) ? "%.2f" : "%.0f") \(entry.totalSpent > entry.budgetAmount ? String(localized: "over") : String(localized: "left")) \(budgetType)")
+                            Text(verbatim: currencySymbol + String(format: (showCents && difference < 100) ? "%.2f" : "%.0f", difference) + " " + (entry.totalSpent > entry.budgetAmount ? String(localized: "over") : String(localized: "left")) + " " + budgetType)
                                 .font(.system(size: 14, weight: .regular, design: .rounded))
                                 .foregroundColor(Color.SubtitleText)
 
@@ -245,10 +260,10 @@ struct MainBudgetWidgetEntryView: View {
                             } currentValueLabel: {
                                 EmptyView()
                             } minimumValueLabel: {
-                                Text("\(entry.totalSpent, specifier: (showCents && entry.totalSpent < 100) ? "%.2f" : "%.0f")")
+                                Text(verbatim: String(format: (showCents && entry.totalSpent < 100) ? "%.2f" : "%.0f", entry.totalSpent))
                                     .font(.system(size: 10, weight: .regular, design: .rounded))
                             } maximumValueLabel: {
-                                Text("\(entry.budgetAmount, specifier: (showCents && entry.budgetAmount < 100) ? "%.2f" : "%.0f")")
+                                Text(verbatim: String(format: (showCents && entry.budgetAmount < 100) ? "%.2f" : "%.0f", entry.budgetAmount))
                                     .font(.system(size: 10, weight: .regular, design: .rounded))
                             }
                             .frame(height: 5)
@@ -277,7 +292,7 @@ struct MainBudgetWidgetEntryView: View {
                             }
                             .font(.system(size: 15, weight: .semibold, design: .rounded))
 
-                            Text("\(currencySymbol)\(difference, specifier: (showCents && difference < 100) ? "%.2f" : "%.0f") \(entry.totalSpent > entry.budgetAmount ? String(localized: "over") : String(localized: "left")) \(budgetType)")
+                            Text(verbatim: currencySymbol + String(format: (showCents && difference < 100) ? "%.2f" : "%.0f", difference) + " " + (entry.totalSpent > entry.budgetAmount ? String(localized: "over") : String(localized: "left")) + " " + budgetType)
                                 .font(.system(size: 14, weight: .regular, design: .rounded))
                                 .foregroundColor(Color.SubtitleText)
 
@@ -287,10 +302,10 @@ struct MainBudgetWidgetEntryView: View {
                                 } currentValueLabel: {
                                     EmptyView()
                                 } minimumValueLabel: {
-                                    Text("\(entry.totalSpent, specifier: (showCents && entry.totalSpent < 100) ? "%.2f" : "%.0f")")
+                                    Text(verbatim: String(format: (showCents && entry.totalSpent < 100) ? "%.2f" : "%.0f", entry.totalSpent))
                                         .font(.system(size: 10, weight: .regular, design: .rounded))
                                 } maximumValueLabel: {
-                                    Text("\(entry.budgetAmount, specifier: (showCents && entry.budgetAmount < 100) ? "%.2f" : "%.0f")")
+                                    Text(verbatim: String(format: (showCents && entry.budgetAmount < 100) ? "%.2f" : "%.0f", entry.budgetAmount))
                                         .font(.system(size: 10, weight: .regular, design: .rounded))
                                 }
                                 .frame(height: 5)
@@ -325,99 +340,8 @@ struct MainBudgetWidgetEntryView: View {
                                 Text("SPENT: \(percentString1)")
                                     .font(.system(size: 10, weight: .medium, design: .rounded))
                                     .foregroundColor(Color.SubtitleText)
-                            }
 
-                            Spacer()
-
-                            RingView(percent: entry.percentageOfDays, width: 2.4, topStroke: Color.DarkBackground, bottomStroke: Color.SecondaryBackground)
-                                .frame(width: 13, height: 13)
-                                .padding(3)
-                        }
-                        .frame(maxWidth: .infinity)
-
-                        GeometryReader { proxy in
-                            VStack(spacing: 6) {
-                                ZStack(alignment: .bottom) {
-                                    ZStack {
-                                        DonutSemicircle(percent: 1, cornerRadius: 4, width: 15)
-                                            .fill(Color.SecondaryBackground)
-                                            .frame(width: proxy.size.width, height: proxy.size.width / 2)
-
-                                        if entry.totalSpent / entry.budgetAmount < 0.97 {
-                                            DonutSemicircle(percent: 1 - (entry.totalSpent / entry.budgetAmount), cornerRadius: 4, width: 15)
-                                                .fill(Color.DarkBackground)
-                                                .frame(width: proxy.size.width, height: proxy.size.width / 2)
-                                        }
-                                    }
-                                    .frame(width: proxy.size.width)
-
-                                    VStack(spacing: -4) {
-                                        WidgetBudgetDollarView(amount: difference, red: entry.totalSpent >= entry.budgetAmount)
-                                            .frame(width: proxy.size.width - 50)
-
-                                        if showTimeFrame(size: proxy.size.width - 50) {
-                                            Text(systemSmallWidgetText)
-                                                .font(.system(size: 10, weight: .medium, design: .rounded))
-                                                .foregroundColor(Color.SubtitleText)
-                                        } else {
-                                            if entry.budgetAmount >= entry.totalSpent {
-                                                Text("left")
-                                                    .font(.system(size: 10, weight: .medium, design: .rounded))
-                                                    .foregroundColor(Color.SubtitleText)
-                                            } else {
-                                                Text("over")
-                                                    .font(.system(size: 10, weight: .medium, design: .rounded))
-                                                    .foregroundColor(Color.SubtitleText)
-                                            }
-                                        }
-                                    }
-                                }
-                                .frame(width: proxy.size.width)
-
-                                HStack {
-                                    if entry.totalSpent > 999.99 || entry.budgetAmount > 999.99 {
-                                        Text("\(Int(round(entry.totalSpent)))")
-                                            .frame(width: 50, alignment: .leading)
-                                        Spacer()
-                                        Text("\(Int(round(entry.budgetAmount)))")
-                                            .frame(width: 50, alignment: .trailing)
-                                    } else {
-                                        Text("\(entry.totalSpent, specifier: "%.2f")")
-                                            .frame(width: 50, alignment: .leading)
-                                        Spacer()
-                                        Text("\(entry.budgetAmount, specifier: "%.2f")")
-                                            .frame(width: 50, alignment: .trailing)
-                                    }
-                                }
-                                .font(.system(size: 10, weight: .medium, design: .rounded))
-                                .foregroundColor(Color.SubtitleText)
-                            }
-                            .frame(width: proxy.size.width, height: proxy.size.height, alignment: .bottom)
-                        }
-                        .frame(maxHeight: .infinity, alignment: .bottom)
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .containerBackground(for: .widget) { Color.PrimaryBackground }
-                }
-            } else {
-                if !entry.found {
-                    Text("Create your overall budget in the app")
-                        .font(.system(size: 14, weight: .medium, design: .rounded))
-                        .multilineTextAlignment(.center)
-                        .foregroundColor(Color.SubtitleText)
-                        .padding(15)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .background(Color.PrimaryBackground)
-                } else {
-                    VStack(spacing: 12) {
-                        HStack(alignment: .top) {
-                            VStack(alignment: .leading, spacing: 2.4) {
-                                Text(headingText.uppercased())
-                                    .font(.system(size: 12, weight: .semibold, design: .rounded))
-                                    .lineLimit(1)
-                                    .foregroundColor(Color.PrimaryText)
-
-                                Text("SPENT: \(percentString1)")
+                                Text("\(periodLabel): \(periodPercentString)")
                                     .font(.system(size: 10, weight: .medium, design: .rounded))
                                     .foregroundColor(Color.SubtitleText)
                             }
@@ -477,10 +401,109 @@ struct MainBudgetWidgetEntryView: View {
                                         Text("\(Int(round(entry.budgetAmount)))")
                                             .frame(width: 50, alignment: .trailing)
                                     } else {
-                                        Text("\(entry.totalSpent, specifier: "%.2f")")
+                                        Text(verbatim: String(format: "%.2f", entry.totalSpent))
                                             .frame(width: 50, alignment: .leading)
                                         Spacer()
-                                        Text("\(entry.budgetAmount, specifier: "%.2f")")
+                                        Text(verbatim: String(format: "%.2f", entry.budgetAmount))
+                                            .frame(width: 50, alignment: .trailing)
+                                    }
+                                }
+                                .font(.system(size: 10, weight: .medium, design: .rounded))
+                                .foregroundColor(Color.SubtitleText)
+                            }
+                            .frame(width: proxy.size.width, height: proxy.size.height, alignment: .bottom)
+                        }
+                        .frame(maxHeight: .infinity, alignment: .bottom)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .containerBackground(for: .widget) { Color.PrimaryBackground }
+                }
+            } else {
+                if !entry.found {
+                    Text("Create your overall budget in the app")
+                        .font(.system(size: 14, weight: .medium, design: .rounded))
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(Color.SubtitleText)
+                        .padding(15)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .background(Color.PrimaryBackground)
+                } else {
+                    VStack(spacing: 12) {
+                        HStack(alignment: .top) {
+                            VStack(alignment: .leading, spacing: 2.4) {
+                                Text(headingText.uppercased())
+                                    .font(.system(size: 12, weight: .semibold, design: .rounded))
+                                    .lineLimit(1)
+                                    .foregroundColor(Color.PrimaryText)
+
+                                Text("SPENT: \(percentString1)")
+                                    .font(.system(size: 10, weight: .medium, design: .rounded))
+                                    .foregroundColor(Color.SubtitleText)
+
+                                Text("\(periodLabel): \(periodPercentString)")
+                                    .font(.system(size: 10, weight: .medium, design: .rounded))
+                                    .foregroundColor(Color.SubtitleText)
+                            }
+
+                            Spacer()
+
+                            RingView(percent: entry.percentageOfDays, width: 2.4, topStroke: Color.DarkBackground, bottomStroke: Color.SecondaryBackground)
+                                .frame(width: 13, height: 13)
+                                .padding(3)
+                        }
+                        .frame(maxWidth: .infinity)
+
+                        GeometryReader { proxy in
+                            VStack(spacing: 6) {
+                                ZStack(alignment: .bottom) {
+                                    ZStack {
+                                        DonutSemicircle(percent: 1, cornerRadius: 4, width: 15)
+                                            .fill(Color.SecondaryBackground)
+                                            .frame(width: proxy.size.width, height: proxy.size.width / 2)
+
+                                        if entry.totalSpent / entry.budgetAmount < 0.97 {
+                                            DonutSemicircle(percent: 1 - (entry.totalSpent / entry.budgetAmount), cornerRadius: 4, width: 15)
+                                                .fill(Color.DarkBackground)
+                                                .frame(width: proxy.size.width, height: proxy.size.width / 2)
+                                        }
+                                    }
+                                    .frame(width: proxy.size.width)
+
+                                    VStack(spacing: -4) {
+                                        WidgetBudgetDollarView(amount: difference, red: entry.totalSpent >= entry.budgetAmount)
+                                            .frame(width: proxy.size.width - 50)
+
+                                        if showTimeFrame(size: proxy.size.width - 50) {
+                                            Text(systemSmallWidgetText)
+                                                .font(.system(size: 10, weight: .medium, design: .rounded))
+                                                .foregroundColor(Color.SubtitleText)
+                                        } else {
+                                            if entry.budgetAmount >= entry.totalSpent {
+                                                Text("left")
+                                                    .font(.system(size: 10, weight: .medium, design: .rounded))
+                                                    .foregroundColor(Color.SubtitleText)
+                                            } else {
+                                                Text("over")
+                                                    .font(.system(size: 10, weight: .medium, design: .rounded))
+                                                    .foregroundColor(Color.SubtitleText)
+                                            }
+                                        }
+                                    }
+                                }
+                                .frame(width: proxy.size.width)
+
+                                HStack {
+                                    if entry.totalSpent > 999.99 || entry.budgetAmount > 999.99 {
+                                        Text("\(Int(round(entry.totalSpent)))")
+                                            .frame(width: 50, alignment: .leading)
+                                        Spacer()
+                                        Text("\(Int(round(entry.budgetAmount)))")
+                                            .frame(width: 50, alignment: .trailing)
+                                    } else {
+                                        Text(verbatim: String(format: "%.2f", entry.totalSpent))
+                                            .frame(width: 50, alignment: .leading)
+                                        Spacer()
+                                        Text(verbatim: String(format: "%.2f", entry.budgetAmount))
                                             .frame(width: 50, alignment: .trailing)
                                     }
                                 }

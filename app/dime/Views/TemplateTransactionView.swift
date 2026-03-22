@@ -323,7 +323,7 @@ struct TemplateTransactionView: View {
                                 .font(.system(size: downsize.small, weight: .light, design: .rounded))
                                 .foregroundColor(Color.SubtitleText)
                                 .baselineOffset(getDollarOffset(big: downsize.big, small: downsize.small))
-                            Text("\(transactionValue, specifier: "%.2f")")
+                            Text(verbatim: String(format: "%.2f", transactionValue))
                                 .font(.system(size: downsize.big, weight: .regular, design: .rounded))
                                 .foregroundColor(Color.PrimaryText)
                         }
